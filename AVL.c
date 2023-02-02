@@ -1,4 +1,7 @@
 /************************ AVL ************************************/  
+# inclure  < stdio.h >
+# inclure  < stdlib.h >
+# inclure  < chaîne.h >
 
 struct arbre_AVL {
     int e;
