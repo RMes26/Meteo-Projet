@@ -38,7 +38,10 @@ void parcoursInfixe(struct arbre_ABR *racine, FILE *outfile) {
 }
 
 
-/************************ AVL ************************************/  
+/*****************************************************************/  
+/*****************************AVL*********************************/
+/*****************************************************************/
+
 
 struct arbre_AVL {
     int e;
@@ -143,8 +146,9 @@ void parcours_Infixe(struct arbre_AVL *racine, FILE *fichier) {
 }
 
 
-
-/**************************** Tab ****************/
+/*************************************************************/
+/****************************TABLEAU**************************/
+/*************************************************************/
 
 
 struct Info {
@@ -159,7 +163,9 @@ int comparer(const void *a, const void *b) {
 }
 
 
-/************************    Main ********************/
+/*************************************************************/
+/**************************MAIN*******************************/
+/*************************************************************/
 
 int main(int argc, char *argv[]) {
     int cpt = 0;
@@ -170,11 +176,11 @@ int main(int argc, char *argv[]) {
     char tri_type[1024] = "--avl";
     for (cpt=0; cpt<argc; cpt++){
         // Chemin d'entrée du fichier
-        if (strcmp(argv[cpt],"-f") == 0){
-            strcpy(input,argv[cpt+1]);
+        if (strcmp(argv[cpt],"-f") == 0){       // comparer deux chaine de caractère 
+            strcpy(input,argv[cpt+1]);  
         }
         // Chemin de sortie du fichier
-        if(strcmp(argv[cpt],"-o") == 0){
+        if(strcmp(argv[cpt],"-o") == 0){ 
             strcpy(output,argv[cpt+1]);
         }
 
@@ -228,7 +234,7 @@ int main(int argc, char *argv[]) {
         while (fgets(ligne, 1024, fichier)) {
             char *premiere_colone = strtok(ligne, ",");
             int e = atoi(premiere_colone);
-            char *valeur = strdup(ligne + strlen(premiere_colone) + 1);
+            char *valeur = strdup(ligne + strlen(premiere_colone) + 1);/
             racine = insertABR(racine, e, valeur);
         }
         strcat(nom,argv[2]);
@@ -237,9 +243,9 @@ int main(int argc, char *argv[]) {
         return 0;
     } */
 
-
-    /*******************TAB****************************/
-
+    /*************************************************************/
+    /*************************TABLEAU*****************************/
+    /*************************************************************/
 
     else if (strcmp(tri_type,"--tab") == 0 ){
         FILE *fichier = fopen(input, "r");
@@ -256,16 +262,16 @@ int main(int argc, char *argv[]) {
                 continue;
             }
             info = realloc(info, (taille + 1) * sizeof(struct Info));
-            char *premiere_colone = strtok(ligne, ",");
-            int e = atoi(strtok(ligne, ","));
-            char *valeur = strdup(ligne + strlen(premiere_colone) + 1);
+            char *premiere_colone = strtok(ligne, ",");  //extraire tous les elements un à un 
+            int e = atoi(strtok(ligne, ","));            //transformer chaine de caractere en un int 
+            char *valeur = strdup(ligne + strlen(premiere_colone) + 1); //duplication de la chaine de caractere 
             info[taille].e = e;
             info[taille].valeur = valeur;
             taille++;
         }
-        fclose(fichier);
+        fclose(fichier); 
         qsort(info, taille, sizeof(struct Info), comparer);
-        strcat(nom,argv[2]);
+        strcat(nom,argv[2]);                            // concatener deux chaines 
         FILE *outfile = fopen(output, "w");
         fprintf(outfile, "%s", premiere_ligne);
         if (croissant == 0){
