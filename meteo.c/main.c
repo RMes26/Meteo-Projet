@@ -50,10 +50,10 @@ int  main ( int argc, char *argv[]) {
         fclose(fichier);
         strcat(nom,argv[2]);
         if (croissant == 0){
-            saveToCSV_AVL(racine, reslutats, parcours_Infixe);
+            sauvegarde_AVL(racine, reslutats, parcours_Infixe);
         }
         else{
-        saveToCSV_AVL(racine, reslutats, InversionOrdreAVL);
+        sauvegarde_AVL(racine, reslutats, InversionOrdreAVL);
         }
         return 0 ;
     }
@@ -72,7 +72,7 @@ int  main ( int argc, char *argv[]) {
             racine = insertABR(racine, e, valeur);
         }
         strcat(nom,argv[2]);
-        saveToCSV_BST(racine, reslutats, croissant);
+        sauvegarde_ABR(racine, reslutats, croissant);
         fclose(fichier);
         return 0; }
 
