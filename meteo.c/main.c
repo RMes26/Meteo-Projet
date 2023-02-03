@@ -11,8 +11,8 @@ int  main ( int argc, char *argv[]) {
     char tri_type[ 1024 ] = " --avl " ;
     for (cpt= 0 ; cpt<argc; cpt++){
         // entrée du fichier
-        if ( strcmp (argv[cpt], " -f " ) == 0 ){
-            strcpy (donnee,argv[cpt+ 1 ]);
+        if ( strcmp (argv[cpt], " -f " ) == 0 ){  //compare deux chaines de caracteres 
+            strcpy (donnee,argv[cpt+ 1 ]);        //copier le contenue d'une chaine de caracteres dans une autre 
         }
         // sortie du fichier
         if ( strcmp (argv[cpt], " -o " ) == 0 ){
@@ -37,18 +37,18 @@ int  main ( int argc, char *argv[]) {
 
  
     if (strcmp(tri_type,"--avl") == 0){                     
-        FILE *fichier = fopen(input, "r");
+        FILE *fichier = fopen(input, "r");                            //ouverture du flux
         struct arbre_AVL *racine = NULL;
         char ligne[1024] ;
         char nom[1024] = "trié_" ;
-        while (fgets(ligne, 1024, fichier)) {
+        while (fgets(ligne, 1024, fichier)) {                         //lire une chaine de caracteres a partir d'un flux
             char *premiere_colone = strtok(ligne, ",");
-            int e = atoi(strtok(ligne, ","));
+            int e = atoi(strtok(ligne, ","));                         //transformer un char en int et extraire tous les caracteres un a un 
             char *valeur = strdup(ligne + strlen(premiere_colone) + 1);
             racine = insert_AVL(racine, e, valeur);
         }
-        fclose(fichier);
-        strcat(nom,argv[2]);
+        fclose(fichier);                                              // fermeture du flux
+        strcat(nom,argv[2]);                                          //concatener deux chaines de caracetres 
         if (croissant == 0){
             sauvegarde_AVL(racine, reslutats, parcours_Infixe);
         }
@@ -68,7 +68,7 @@ int  main ( int argc, char *argv[]) {
         while (fgets(ligne, 1024, fichier)) {
             char *premiere_colone = strtok(ligne, ",");
             int e = atoi(premiere_colone);
-            char *valeur = strdup(ligne + strlen(premiere_colone) + 1);
+            char *valeur = strdup(ligne + strlen(premiere_colone) + 1); // duplication des chaines de caracteres 
             racine = insertABR(racine, e, valeur);
         }
         strcat(nom,argv[2]);
@@ -103,7 +103,7 @@ int  main ( int argc, char *argv[]) {
             taille++;
         }
         fclose (fichier);
-        qsort (info, taille, sizeof ( struct Info), comparer);
+        qsort (info, taille, sizeof ( struct Info), comparer);   //tri du tableau
         strcat (nom,argv[ 2 ]);
         FILE *outfile = fopen (reslutats, " w " );
         fprintf (outfile, " %s " , premiere_ligne);
