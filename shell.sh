@@ -183,7 +183,7 @@ case $@ in
     *-F*)
         region='F'
         echo 'Région sélectionnée : France métropolitaine + Corse. Filtrage en cours.'
-        tail -n +2 meteo.csv > meteoR.csv
+        tail +2 meteo.csv > meteoR.csv
 
         awk '{split($10,f,","); if(f[1] + 0 <= 55 && f[1] + 0 >= 40 && f[2] + 0 >= -10 && f[2] +0 <= 10) print $0;}' FS=";" meteoR.csv > filtre.csv
 
@@ -194,7 +194,7 @@ case $@ in
     *-G*)
         region='G'
         echo 'Région sélectionnée : Guyane Française. Filtrage en cours.'
-        tail -n +2 meteo.csv > meteoR.csv
+        tail +2 meteo.csv > meteoR.csv
 
         awk '{split($10,g,","); if(g[1] + 0 <= 10 && g[1] + 0 >= 2 && g[2] + 0 >= -60 && g[2] +0 <= 60) print $0;}' FS=";" meteoR.csv > filtre.csv
        
@@ -205,7 +205,7 @@ case $@ in
     *-S*)
         region='S'
         echo 'Région sélectionnée : Saint-Pierre et Miquelon (ile située à l’Est du Canada). Filtrage en cours.'
-        tail -n +2 meteo.csv > meteoR.csv
+        tail +2 meteo.csv > meteoR.csv
 
         awk '{split($10,s,","); if(s[1] + 0 <= 47 && s[1] + 0 >= 46 && s[2] + 0 >= -60 && s[2] +0 <= -50) print $0;}' FS=";" meteoR.csv > filtre.csv
 
@@ -216,7 +216,7 @@ case $@ in
     *-A*)
         region='A'
         echo 'Région sélectionnée : Antilles. Filtrage en cours.'
-        tail -n +2 meteo.csv > meteoR.csv
+        tail +2 meteo.csv > meteoR.csv
 
         awk '{split($10,a,","); if(a[1] + 0 <= 20 && a[1] + 0 >= 10 && a[2] + 0 >= -70 && a[2] +0 <= -55) print $0;}' FS=";" meteoR.csv > filtre.csv
         
@@ -227,7 +227,7 @@ case $@ in
     *-O*)
         region='O'
         echo 'Région sélectionnée : Océan indien. Filtrage en cours.'
-        tail -n +2 meteo.csv > meteoR.csv
+        tail +2 meteo.csv > meteoR.csv
 
         awk '{split($10,o,","); if(o[1] + 0 >= -55 && o[1] + 0 <= 20 && o[2] + 0 >= 20 && o[2] +0 s= 135) print $0;}' FS=";" meteoR.csv > filtre.csv
 
@@ -238,7 +238,7 @@ case $@ in
     *-Q*)
         region='Q'
         echo 'Région sélectionnée : Antarctique. Filtrage en cours.'
-        tail -n +2 meteo.csv > meteoR.csv
+        tail +2 meteo.csv > meteoR.csv
 
         awk '{split($10,q,","); if(q[1] + 0 <= -60) print $0;}' FS=";" meteoR.csv > filtre.csv
 
@@ -250,7 +250,7 @@ case $@ in
     echo 'Aucune région sélectionée !'
     ;;
 esac
-    rm meteoR.csv
+    
 
 # ----------------------------------------------------------------- TEMPERATURE 1 -----------------------------------------------------------------------------------
 
