@@ -73,7 +73,7 @@ case $@ in
     ;;
 
     *)
-    echo 'Il n y aura pas de données sur la Pression atmosphérique qui seront traitées !'
+    echo 'Il n y aura pas de données sur la Pression Atmosphérique qui seront traitées !'
     ;;
 esac
 
@@ -144,83 +144,6 @@ if [ $option == 0 ]; then
     exit; 
 fi
 
-# ----------------------------------------------------------------- REGION -----------------------------------------------------------------------------------
-
-region=''
-#copie en supp la premiere ligne explicant les emplacements dans le fichier meteo.csv
-tail -n +2 meteo.csv > filtre.csv
-
-case $@ in 
-    
-    *-F*)
-        region='F'
-        echo ' '
-        echo ' Région sélectionnée : France métropolitaine + Corse. Filtrage en cours.'
-        tail -n +2 meteo.csv > meteoR.csv
-        awk -F';' '$15 ~ /^[01-95]/ && $15 < 96000 {print}' meteoR.csv > filtre.csv
-        echo 'Filtre France appliquée'
-        echo ' '
-    ;;
-
-    *-G*)
-        region='G'
-        echo ' '
-        echo 'Région sélectionnée : Guyane Française. Filtrage en cours.'
-        tail -n +2 meteo.csv > meteoR.csv
-        awk -F';' '$15 ~ /^973/ {print}' meteoR.csv > filtre.csv
-        echo 'Filtre Guyane appliqué!'
-        echo ' '
-    ;; 
-
-    *-S*)
-        region='S'
-        echo ' '
-        echo 'Région sélectionnée : Saint-Pierre et Miquelon (ile située à l’Est du Canada). Filtrage en cours.'
-        tail -n +2 meteo.csv > meteoR.csv
-        awk -F';' '$15 ~ /^975/ {print}' meteoR.csv > filtre.csv
-        echo 'Filtre Saint-Pierre et Miquelon appliqué!'
-        echo ' '
-    ;;
-
-    *-A*)
-        region='A'
-        echo ' '
-        echo 'Région sélectionnée : Antilles. Filtrage en cours.'
-        tail -n +2 meteo.csv > meteoR.csv
-        awk -F';' '$15 ~ /^971/ {print}' meteoR.csv > filtre.csv
-        awk -F';' '$15 ~ /^972/ {print}' meteoR.csv >> filtre.csv
-        awk -F';' '$15 ~ /^978/ {print}' meteoR.csv >> filtre.csv
-        awk -F';' '$15 ~ /^977/ {print}' meteoR.csv >> filtre.csv
-        echo 'Filtre Antilles appliqué!'
-        echo ' '
-    ;;
-
-    *-O*)
-        region="O"
-        echo ' '
-        echo 'Région sélectionnée : Océan indien. Filtrage en cours.'
-        tail -n +2 meteo.csv > meteoR.csv
-        awk -F';' '$15 ~ /^974/ {print}' meteoR.csv > filtre.csv
-        awk -F';' '$15 ~ /^976/ {print}' meteoR.csv >> filtre.csv
-        echo 'Filtre Ocean Indien appliqué!'
-        echo ' '
-    ;;
-
-    *-Q*)
-        region='Q'
-        echo ' '
-        echo 'Région sélectionnée : Antarctique. Filtrage en cours.'
-        tail -n +2 meteo.csv > meteoR.csv
-        awk 'BEGIN {FS=";"}{if (($10<"-91") && ($10>"-59")) print }' meteoR.csv > filtre.csv
-        echo 'Filtre Antarctique appliqué!'
-        echo ' '        
-    ;;
-
-    *)
-    echo 'Aucune région sélectionée !'
-    ;;
-esac
-
 # ----------------------------------------------------------------- TRI -----------------------------------------------------------------------------------
 
 tri=''
@@ -249,37 +172,111 @@ case $@ in
 
 esac
 
+# ----------------------------------------------------------------- REGION -----------------------------------------------------------------------------------
+
+region=''
+#copie en supp la premiere ligne explicant les emplacements dans le fichier meteo.csv
+
+
+case $@ in 
+    
+    *-F*)
+        region='F'
+        echo 'Région sélectionnée : France métropolitaine + Corse. Filtrage en cours.'
+        tail -n +2 meteo.csv > meteoR.csv
+
+        awk '{split($10,f,","); if(f[1] + 0 <= 55 && f[1] + 0 >= 40 && f[2] + 0 >= -10 && f[2] +0 <= 10) print $0;}' FS=";" meteoR.csv > filtre.csv
+
+        echo 'Filtre France appliquée'
+        echo ' '
+    ;;
+
+    *-G*)
+        region='G'
+        echo 'Région sélectionnée : Guyane Française. Filtrage en cours.'
+        tail -n +2 meteo.csv > meteoR.csv
+
+        awk '{split($10,g,","); if(g[1] + 0 <= 10 && g[1] + 0 >= 2 && g[2] + 0 >= -60 && g[2] +0 <= 60) print $0;}' FS=";" meteoR.csv > filtre.csv
+       
+        echo 'Filtre Guyane appliqué!'
+        echo ' '
+    ;; 
+
+    *-S*)
+        region='S'
+        echo 'Région sélectionnée : Saint-Pierre et Miquelon (ile située à l’Est du Canada). Filtrage en cours.'
+        tail -n +2 meteo.csv > meteoR.csv
+
+        awk '{split($10,s,","); if(s[1] + 0 <= 47 && s[1] + 0 >= 46 && s[2] + 0 >= -60 && s[2] +0 <= -50) print $0;}' FS=";" meteoR.csv > filtre.csv
+
+        echo 'Filtre Saint-Pierre et Miquelon appliqué!'
+        echo ' '
+    ;;
+
+    *-A*)
+        region='A'
+        echo 'Région sélectionnée : Antilles. Filtrage en cours.'
+        tail -n +2 meteo.csv > meteoR.csv
+
+        awk '{split($10,a,","); if(a[1] + 0 <= 20 && a[1] + 0 >= 10 && a[2] + 0 >= -70 && a[2] +0 <= -55) print $0;}' FS=";" meteoR.csv > filtre.csv
+        
+        echo 'Filtre Antilles appliqué!'
+        echo ' '
+    ;;
+
+    *-O*)
+        region='O'
+        echo 'Région sélectionnée : Océan indien. Filtrage en cours.'
+        tail -n +2 meteo.csv > meteoR.csv
+
+        awk '{split($10,o,","); if(o[1] + 0 >= -55 && o[1] + 0 <= 20 && o[2] + 0 >= 20 && o[2] +0 s= 135) print $0;}' FS=";" meteoR.csv > filtre.csv
+
+        echo 'Filtre Ocean Indien appliqué!'
+        echo ' '
+    ;;
+
+    *-Q*)
+        region='Q'
+        echo 'Région sélectionnée : Antarctique. Filtrage en cours.'
+        tail -n +2 meteo.csv > meteoR.csv
+
+        awk '{split($10,q,","); if(q[1] + 0 <= -60) print $0;}' FS=";" meteoR.csv > filtre.csv
+
+        echo 'Filtre Antarctique appliqué!'
+        echo ' '        
+    ;;
+
+    *)
+    echo 'Aucune région sélectionée !'
+    ;;
+esac
+    rm meteoR.csv
 
 # ----------------------------------------------------------------- TEMPERATURE 1 -----------------------------------------------------------------------------------
 
 if [[ $mode == 1 ]]; then
 
     echo 'Mode 1 pour la température'
-    awk -F ";" '$11 != ""' filtre.csv > meteot1.tmp
-    sort -t, -k1,1 meteot1.tmp |awk -F';' '{if ($1!=p) {if (NR>1) print p,";",max; p=$1; max=$11} else {if ($11>max) max=$11}} END{print p,";",max}' > t1max.tmp
-    sort -t, -k1,1 meteot1.tmp |awk -F';' '{if ($1!=p) {if (NR>1) print p,";",max; p=$1; max=$11} else {if ($11<max) max=$11}} END{print p,";",max}' > t1min.tmp
-    join -t ";" -1 1 -2 1 t1max.tmp t1min.tmp > t1.tmp
-
+    
     case $tri in 
         abr)
-	        ./ABR.c.c t1.tmp
+	        ./ABR.c t1.tmp
             echo 't1 tri abr en cours' 
         ;;
 
         tab)
-	        ./TAB.c.c t1.tmp
+	        ./TAB.c t1.tmp
             echo 't1 tri tab...'
         ;;
 
         *)
-	        ./AVL.c.c t1.tmp
-            grep -v "^$" sorted.csv > sorted.tmp
-	        cat sorted.tmp > sorted.csv
+	        ./AVL.c t1.tmp
+
             echo 't1 tri avl...' 
         ;;
     esac
 
-    cat sorted.csv > meteot1.tmp
+    
     echo 'resultat disponible dans le fichier meteot1.csv'
 
 fi 
@@ -288,25 +285,24 @@ fi
 
 if [[ $mode == 2 ]]; then
     echo 'Mode 2 pour la température'
-    awk -F ";" '$11 != ""' filtre.csv > meteot2.tmp
+    
 
     case $tri in 
         abr)
-            ./ABR.c moy_date.tmp
+            ./ABR.c t2.tmp
             echo 't2 tri abr...'
         ;;
 
         tab)
-            ./TAB.c moy_date.tmp
+            ./TAB.c t2.tmp
             echo 't2 tri tab...'
         ;;
 
         *)
-            sort -t ';' -k1 moy_date.tmp > sorted.csv
+            
         ;;
     esac
 
-    cat  sorted.csv > meteot2.csv
     echo 'resultat disponible dans le fichier meteot2.csv'
 fi
 
@@ -314,8 +310,7 @@ fi
 
 if [[ $mode == 3 ]]; then
     echo 'Mode 3 pour la température'
-    sort -t ";" -k2,2 -k1,1 filtre.csv > tridatestation.tmp
-    cut -d ";" -f 1,2,11 tridatestation.tmp > meteot3.csv
+    
     echo 'resultat disponible dans le fichier meteot3.csv'
 fi
 
@@ -324,31 +319,27 @@ fi
 if [[ $pression == 1 ]]; then
 
     echo 'Mode 1 pour la pression'
-    awk -F ";" '$7 != ""' filtre.csv > meteop1.tmp
-    sort -t, -k1,1 meteop1.tmp |awk -F';' '{if ($1!=p) {if (NR>1) print p,";",max; p=$1; max=$7} else {if ($7>max) max=$7}} END{print p1,";",max}' > p1max.tmp
-    sort -t, -k1,1 meteop1.tmp |awk -F';' '{if ($1!=p) {if (NR>1) print p,";",max; p=$1; max=$7} else {if ($7<max) max=$7}} END{print p,";",max}' > p1min.tmp
-    join -t ";" -1 1 -2 1 p1max.tmp p1min.tmp > meteop1.tmp
+    
     
     case $tri in 
         abr)
-            ./ABR.c pfin.tmp
+            ./ABR.c p1.tmp
             echo 'tri abr p1'
         ;;
 
         tab)
-            ./TAB.c pfin.tmp
+            ./TAB.c p1.tmp
             echo 'tri tab...'
         ;;
 
         *)
-            ./AVL.c pfin.tmp
-            grep -v "^$" sorted.csv > sorted.tmp
-            cat sorted.tmp > sorted.csv
+            ./AVL.c p1.tmp
+
             echo ' p1 tri avl...' 
         ;;
     esac
 
-    cat sorted.csv > meteop1.csv
+
     echo 'resultat disponible dans le fichier meteo1.csv'
 fi
 
@@ -356,26 +347,26 @@ fi
 
 if [[ $pression == 2 ]]; then
     echo 'Mode 2 pour la pression'
-    awk -F ";" '$7 != ""' filtre.csv > meteop2.tmp
+    
 
     case $tri in 
         abr) 
-            ./ABR.c moypression.tmp
+            ./ABR.c p2.tmp
             echo 'p2 tri abr...'
         ;;
 
         tab)
-            ./TAB.c moypression.tmp
+            ./TAB.c p2.tmp
             echo 'tri tab...' 
         ;;
 
         *)
-            sort -t ';' -k1 moypression.tmp > sorted.csv
+           
             echo 'p2 tri avl...' 
         ;;
     esac
 
-    cat sorted.csv > trip2.csv
+
     echo 'resultat disponible dans le fichier trip2.csv'
 fi
 
@@ -383,45 +374,34 @@ fi
 
 if [[ $pression == 3 ]]; then
     echo 'mode 3 pour la pression'
-    sort -t ";" -k2,2 -k1,1 filtre.csv > tridatestationpression.csv
-    cut -d ";" -f 1,2,7 tridatestationpression.csv > trip3.csv
-    echo 'resultat disponible dans le fichier trip3.csv'
+
+    echo 'resultat disponible dans le fichier p3.csv'
 fi
 
 # ----------------------------------------------------------------- VENT -----------------------------------------------------------------------------------
 
 if [[ $wind == 1 ]]; then
     echo 'Vent !!!!!'
-    awk -F ";" '$4 != ""' filtre.csv > meteov.tmp
-    cut -d ";" -f 1,10 filtre.csv > coordonnees0.tmp
-    sed 's/,/;/g' coordonnees0.tmp > coordonnees1.tmp
-    sort -t ";" -k1 coordonnees1.tmp > coordonnees2.tmp
-    sort coordonnees2.tmp | uniq > coordonnees.tmp
-    join -t ";" -1 1 -2 1 dirmoy.tmp vitessemoy.tmp > dirvitmoy.tmp
+    
 
     case $tri in
         abr) 
-            ./ABR.c dirvitmoy.tmp
+            ./ABR.c vent.tmp
             echo 'vent tri abr...' 
         ;;
         tab)
-            ./TAB.c dirvitmoy.tmp
+            ./TAB.c vent.tmp
             echo 'vent tri tab...'
         ;;
 
         *)
-            ./AVL.c dirvitmoy.tmp
+            ./AVL.c vent.tmp
             grep -v "^$" sorted.csv > sorted.tmp
             cat sorted.tmp > sorted.csv
             echo 'vent tri avl...' 
         ;;
     esac
 
-    cat sorted.csv > triwind.csv
-    sed 's/ ;/;/g' triwind.csv > triiiwind.tmp
-    sed 's/ ;/;/g' triiiwind.tmp > triiiiwind.tmp
-    sort -t ';' -k1 triiiiwind.tmp > triiwind.tmp
-    sed 's/ ;/;/g' coordonnees.tmp > coordonneees.tmp
     echo 'resultat disponible dans le fichier triwind.csv'
 fi
 
@@ -429,70 +409,50 @@ fi
 
 if [[ $height == 1 ]]; then
     echo 'Altitude !!!!'
-    sort -t';' -k1 filtre.csv > resheight.tmp
-    awk -F ";" '!a[$1]++' resheight.tmp > resheight2.tmp
-    cut -d ";" -f 1,14 resheight2.tmp > resheightfinal.tmp
-    sort -t ';' -k2nr  resheightfinal.tmp > triheight.csv
-    cut -d ";" -f 1,10 filtre.csv > coordonnees0.tmp
-    sed 's/,/;/g' coordonnees0.tmp > coordonnees1.tmp
-    sort -t ";" -k1 coordonnees1.tmp > coordonnees2.tmp
-    sort coordonnees2.tmp | uniq > coordonnees.tmp
-    sed 's/ ;/;/g' triheight.csv > triiheight.tmp
+    
 
     case $tri in
         abr)
-            ./ABR.c triiheight.tmp
+            ./ABR.c altitude.tmp
             echo 'tri abr...' 
         ;;
 
         tab) 
-            ./TAB.c triiheight.tmp
+            ./TAB.c altitude.tmp
             echo 'tri tab...'
         ;;
         *)
-            ./AVL.c triiheight.tmp
-            grep -v "^$" sorted.csv > sorted.tmp
-            cat sorted.tmp > sorted.csv
+            ./AVL.c altitude.tmp
+
             echo 'tri avl...' 
         ;;
     esac
     
-    cat sorted.csv > triiiheight.tmp
-    sed 's/ ;/;/g' coordonnees.tmp > coordonneees.tmp
+
 fi
 
 # ----------------------------------------------------------------- HUMIDITE -----------------------------------------------------------------------------------
 
 if [[ $moisture == 1 ]]; then
     echo 'Humidite !!!!!'
-    awk -F ";" '$6 != ""' filtre.csv > meteoh.tmp
-    cut -d ";" -f 1,10 filtre.csv > coordonnees0.tmp
-    sed 's/,/;/g' coordonnees0.tmp > coordonnees1.tmp
-    sort -t ";" -k1 coordonnees1.tmp > coordonnees2.tmp
-    sort coordonnees2.tmp | uniq > coordonnees.tmp
-    awk -F ";" '!a[$1]++' maxmoisture.tmp > maxmoisture2.tmp
-    sort -t ";" -k2nr maxmoisture.csv > trimoisture.csv
-    sed 's/ ;/;/g' trimoisture.csv > triimoisture.tmp
+
 
     case $tri in
         abr)
-            ./ABR.c triimoisture.tmp
+            ./ABR.c humidité.tmp
             echo 'tri abr...'
         ;;
 
         tab)
-            ./TAB.c triimoisture.tmp
+            ./TAB.c humidité.tmp
             echo 'tri tab...'
         ;;
 
         *)
-            ./AVL.c triimoisture.tmp
-            grep -v "^$" sorted.csv > sorted.tmp
-            cat sorted.tmp > sorted.csv
+            ./AVL.c humidité.tmp
+
             echo 'tri avl...'
         ;;
 esac
-    
-    cat sorted.csv > triiimoisture.tmp
-    sed 's/ ;/;/g' coordonnees.tmp > coordonneees.tmp
+
 fi
