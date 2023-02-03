@@ -1,8 +1,7 @@
 #!/bin/bash
-#faire tant que ????? possible idk
+
 #ajouter -f + --help
 #supprimer -d + tous les awk avec date1/2 + tri inversé 
-#mettre des elif ou selon cas
 #si mets -t2 et -t1 sa sera le t1 qui l'emportera de meme pour la pression
 # si mets --abr et --avl sa sera le abr qui sera pris en compte
 
