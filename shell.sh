@@ -294,7 +294,7 @@ esac
 if [[ $mode == 1 ]]; then
 
     echo 'Mode 1 pour la température'
-    sort -n filtre.csv | awk '{split ($10,m,","); sort -n filtre.csv}' FS";" filtre.csv > mode1.csv
+    
 exit
     case $tri in 
         abr)
