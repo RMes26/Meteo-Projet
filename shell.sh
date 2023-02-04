@@ -5,6 +5,46 @@
 #si mets -t2 et -t1 sa sera le t1 qui l'emportera de meme pour la pression
 # si mets --abr et --avl sa sera le abr qui sera pris en compte
 
+# ----------------------------------------------------------------- HELP -----------------------------------------------------------------------------------
+if [[ $@ =~ '--help' ]]; then
+    echo 'Liste des options disponibles : '
+    echo '-t pour la température. -t1,-t2,-t3 pour le mode 1,2,3'
+    echo '-p pour la pression atmosphérique. -p1,-p2,-p3 pour le mode 1,2,3'
+    echo '-w pour le vent'
+    echo '-h pour l altitude'
+    echo '-m pour l humiditité'
+    echo '--tab pour trier avec un tableau'
+    echo '--abr pour trier avec un arbre binaire'
+    echo '--avl (cas défaut, pas obligé de le mettre) pour trier avec un arbre binaire de recherche'
+    echo 'Vous êtes obligés de saisir au minimum une option'
+    echo ' '
+    echo 'Région disponible :'
+    echo '-F pour France métropolitaine avec les Corse'
+    echo '-G pour la Guyane Francaise'
+    echo '-S pour Saint-Pierre et Miquelon'
+    echo '-A pour les Antilles'
+    echo '-O pour l Océan Indien'
+    echo '-Q pour l Antarctique'
+    echo 'Vous n êtes pas obligé de sélectionné une région pour pouvoir lancer le programme'
+    echo ' '
+    echo 'A ne pas oublier :'
+    echo 'Télécharger tous les fichier'
+    echo 'Donner les droits aux fichiers téléchargé'
+    echo '"-fmeteo.csv" sinon un message d erreur apparaitra. Le programme n aura pas le bon fichier de donnée'
+    echo 'Lancer le programme via "bash shell.sh" ou "./shell.sh"'
+    exit
+fi
+# ----------------------------------------------------------------- FICHIER -----------------------------------------------------------------------------------
+
+if [[ $@ =~ '-fmeteo.csv' ]]; then
+    echo ' '
+    echo 'Bon fichier de données'
+    echo ' '
+else
+    echo ' '
+    echo 'Fichier de données non valable Veuilliez saisir -fmeteo.csv'
+    exit
+fi
 
 # ----------------------------------------------------------------- TEMPERATURE -----------------------------------------------------------------------------------
 
@@ -175,18 +215,16 @@ esac
 # ----------------------------------------------------------------- REGION -----------------------------------------------------------------------------------
 
 region=''
-#copie en supp la premiere ligne explicant les emplacements dans le fichier meteo.csv
-
 
 case $@ in 
     
     *-F*)
         region='F'
         echo 'Région sélectionnée : France métropolitaine + Corse. Filtrage en cours.'
-        tail +2 meteo.csv > meteoR.csv
+        tail +2 meteo.csv > meteoR.csv #copie en supp la premiere ligne explicant les emplacements dans le fichier meteo.csv
 
         awk '{split($10,f,","); if(f[1] + 0 <= 55 && f[1] + 0 >= 40 && f[2] + 0 >= -10 && f[2] +0 <= 10) print $0;}' FS=";" meteoR.csv > filtre.csv
-
+        rm meteoR.csv
         echo 'Filtre France appliquée'
         echo ' '
     ;;
@@ -197,7 +235,7 @@ case $@ in
         tail +2 meteo.csv > meteoR.csv
 
         awk '{split($10,g,","); if(g[1] + 0 <= 10 && g[1] + 0 >= 2 && g[2] + 0 >= -60 && g[2] +0 <= 60) print $0;}' FS=";" meteoR.csv > filtre.csv
-       
+        rm meteoR.csv      
         echo 'Filtre Guyane appliqué!'
         echo ' '
     ;; 
@@ -208,7 +246,7 @@ case $@ in
         tail +2 meteo.csv > meteoR.csv
 
         awk '{split($10,s,","); if(s[1] + 0 <= 47 && s[1] + 0 >= 46 && s[2] + 0 >= -60 && s[2] +0 <= -50) print $0;}' FS=";" meteoR.csv > filtre.csv
-
+        rm meteoR.csv
         echo 'Filtre Saint-Pierre et Miquelon appliqué!'
         echo ' '
     ;;
@@ -219,7 +257,7 @@ case $@ in
         tail +2 meteo.csv > meteoR.csv
 
         awk '{split($10,a,","); if(a[1] + 0 <= 20 && a[1] + 0 >= 10 && a[2] + 0 >= -70 && a[2] +0 <= -55) print $0;}' FS=";" meteoR.csv > filtre.csv
-        
+        rm meteoR.csv  
         echo 'Filtre Antilles appliqué!'
         echo ' '
     ;;
@@ -230,7 +268,7 @@ case $@ in
         tail +2 meteo.csv > meteoR.csv
 
         awk '{split($10,o,","); if(o[1] + 0 >= -55 && o[1] + 0 <= 20 && o[2] + 0 >= 20 && o[2] +0 s= 135) print $0;}' FS=";" meteoR.csv > filtre.csv
-
+        rm meteoR.csv
         echo 'Filtre Ocean Indien appliqué!'
         echo ' '
     ;;
@@ -241,23 +279,25 @@ case $@ in
         tail +2 meteo.csv > meteoR.csv
 
         awk '{split($10,q,","); if(q[1] + 0 <= -60) print $0;}' FS=";" meteoR.csv > filtre.csv
-
+        rm meteoR.csv
         echo 'Filtre Antarctique appliqué!'
         echo ' '        
     ;;
 
     *)
+    tail +2 meteo.csv > filtre.csv
     echo 'Aucune région sélectionée !'
     ;;
 esac
-    rm meteoR.csv
+
 
 # ----------------------------------------------------------------- TEMPERATURE 1 -----------------------------------------------------------------------------------
 
 if [[ $mode == 1 ]]; then
 
     echo 'Mode 1 pour la température'
-    
+    sort -n filtre.csv | awk '{split ($10,m,","); sort -n filtre.csv}' FS";" filtre.csv > mode1.csv
+exit
     case $tri in 
         abr)
 	        ./ABR.c t1.tmp
