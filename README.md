@@ -11,5 +11,6 @@ Exemple de commande : "bash shell.sh -t1 -w -h -F meteo.csv"
 DEROULEMENT DU PROGRAMME :
 Dans un premier, le script va analyser les options saisis par l'utilisateur (température,pression, vent , altitude, région, tris, humidité). Selon les options choisis, le programme communiquera de différente manière avec le programme C. Le résultat du programme sera dans un fichier nommé "meteoF.csv". Si vous ne souvenez plus des options disponibles, il y a la commande "--help" qui permet de re-expliquer les options disponibles.
 
+Si vous avez besoin d'aide, vous pouvez faire "--help", cela affichera un message d'aide .
 
 Projet réalisé par Mesbahy Rémi et Mathéo Boyeldieu en MI 5.
